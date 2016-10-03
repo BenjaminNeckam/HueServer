@@ -10,7 +10,6 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.json.JSONObject;
 
 @Path("/service")
 public class HueServer {
@@ -23,8 +22,10 @@ public class HueServer {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
         
+        String hueIp = System.getProperty("hue_ip");
+        
         Client client = ClientBuilder.newClient();
-        WebTarget webTarget = client.target("http://10.0.0.13/").path("api/6dd2506f56ef41c9119969894be4468d/lights/1/state");
+        WebTarget webTarget = client.target("http://" + hueIp).path("/api/6dd2506f56ef41c9119969894be4468d/lights/1/state");
         Invocation.Builder invocationBuilder = webTarget.request(MediaType.APPLICATION_JSON);
         Response response = invocationBuilder.put(Entity.entity(json, MediaType.APPLICATION_JSON));
         
